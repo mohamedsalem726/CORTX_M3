@@ -10,14 +10,14 @@
 /* Global Macros definition*/
 
 /* Triggering type related Macros */
-#define MEXTI_U8_RISING_EDGE_TRIGGER		0
-#define MEXTI_U8_FALLING_EDGE_TRIGGER		1
-#define MEXTI_U8_BOTH_EDGES_TRIGGER			2
+#define MEXTI_RISING_EDGE_TRIGGER		0
+#define MEXTI_FALLING_EDGE_TRIGGER		1
+#define MEXTI_BOTH_EDGES_TRIGGER			2
 /**********************************/
 
 /* Enabling and disabling Macros */
-#define MEXTI_U8_ENABLE						1
-#define MEXTI_U8_DISABLE					0
+#define MEXTI_ENABLE						1
+#define MEXTI_DISABLE					0
 /*********************************/
 
 /***************************/

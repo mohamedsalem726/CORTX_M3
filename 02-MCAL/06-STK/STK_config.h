@@ -9,9 +9,9 @@
 
 /* Selecting the clock source
  * Available options:-
- * 						MSTK_U8_CLKSOURCE_AHB_8
- * 						MSTK_U8_CLKSOURCE_AHB			*/
-#define MSTK_U8_CLKSOURCE				MSTK_U8_CLKSOURCE_AHB_8
+ * 						MSTK_CLKSOURCE_AHB_8
+ * 						MSTK_CLKSOURCE_AHB			*/
+#define MSTK_CLKSOURCE				MSTK_CLKSOURCE_AHB_8
 
 #define MSTK_AHB_CLK						8000000 		/* Clock frequency of AHB */
 
