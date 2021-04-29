@@ -11,9 +11,15 @@
 #include "STK_private.h"
 #include "STK_config.h"
 
+void (* CallBack)(void);
+
 void MSTK_voidInit(void)
 {
-	MSTK -> CTRL &= ~(0x01 << MSTK_COUNTFLAG_BIT);
+	//MSTK -> CTRL &= ~(0x01 << MSTK_COUNTFLAG_BIT);
+
+	CLR_BIT(MSTK -> CTRL, MSTK_COUNTFLAG_BIT);
+
+	MSTK -> CTRL &= ~(0x01 << MSTK_CLKSOURCE_BIT);
 	MSTK -> CTRL |=  (MSTK_CLKSOURCE  << MSTK_CLKSOURCE_BIT);
 	
 	#if   (MSTK_CLKSOURCE == MSTK_CLKSOURCE_AHB_8)
@@ -41,7 +47,7 @@ u32 MSTK_u32CurrentVal(void)
 
 void MSTK_voidCounterEnDis(u8 Copy_u8CounterEnOrDis)
 {
-	MSTK -> CTRL &= ~(0x01 << MSTK_U8_COUNTER_EN_BIT);
+	MSTK -> CTRL &= ~(0x01 << MSTK_COUNTER_EN_BIT);
 	MSTK -> CTRL |= (Copy_u8CounterEnOrDis << MSTK_COUNTER_EN_BIT);
 }
 
@@ -75,12 +81,13 @@ void MSTK_voidSetIntervalSingle(u32 Copy_u32Ticks , u8 Copy_u8ValueType , void (
 	MSTK_voidTICKInterrupt(MSTK_TICKINT_EN);
 	MSTK -> VAL = 0x00;
 	MSTK_voidLoadVal(Copy_u32Ticks);
-	MSTK_voidCounterEnDis(STK_COUNTER_EN);
+	MSTK_voidCounterEnDis(MSTK_COUNTER_EN);
 	
 	CallBack = Copy_ptr;
 }
 void MSTK_voidSetIntervalPeriodic(u32 Copy_u32Ticks , u8 Copy_u8ValueType , void (*Copy_ptr)(void))
 {
+	CallBack = Copy_ptr;
 	
 	switch(Copy_u8ValueType)
 	{
@@ -89,12 +96,13 @@ void MSTK_voidSetIntervalPeriodic(u32 Copy_u32Ticks , u8 Copy_u8ValueType , void
 		case MSTK_MICROS  : Copy_u32Ticks *= (MSTK_CLK/MSTK_MICROS_DIVIDER);  break;
 		case MSTK_SECONDS : Copy_u32Ticks *= (MSTK_CLK);                         break;
 	}
-	MSTK_voidTICKInterrupt(MSTK_TICKINT_EN);
+	MSTK_voidLoadVal(Copy_u32Ticks-1);
 	MSTK -> VAL = 0x00;
-	MSTK_voidLoadVal(Copy_u32Ticks);
 	MSTK_voidCounterEnDis(MSTK_COUNTER_EN);
-	
-	CallBack = Copy_ptr;
+
+	MSTK_voidTICKInterrupt(MSTK_TICKINT_EN);
+
+
 }
 
 u32 MSTK_u32GetReminingTime(u8 Copy_u8ValueType)
@@ -105,16 +113,19 @@ u32 MSTK_u32GetReminingTime(u8 Copy_u8ValueType)
 		case MSTK_MILLIS  : return ((MSTK -> VAL)/(MSTK_CLK/MSTK_MILLIS_DIVIDER));    break;
 		case MSTK_MICROS  : return ((MSTK -> VAL)/(MSTK_CLK/MSTK_MICROS_DIVIDER));    break;
 		case MSTK_SECONDS : return ((MSTK -> VAL)/(MSTK_CLK));                           break;
+		default:	return 0;		break;
 	}
 }
 
 u32 MSTK_u32GetElapsedTime(u8 Copy_u8ValueType)
 {
-	witch(Cpy_u8TimeType){
+	switch(Copy_u8ValueType){
 		case MSTK_TICKS  : return  ((MSTK->LOAD) - (MSTK->VAL));											break;
 		case MSTK_MICROS : return (((MSTK->LOAD) - (MSTK->VAL)) / (MSTK_CLK/MSTK_MICROS_DIVIDER));	break;
 		case MSTK_MILLIS : return (((MSTK->LOAD) - (MSTK->VAL)) / (MSTK_CLK/MSTK_MILLIS_DIVIDER));	break;
 		case MSTK_SECONDS: return (((MSTK->LOAD) - (MSTK->VAL)) / (MSTK_CLK));						    break;
+		default:	return 0;		break;
+
 	}
 }
 
@@ -123,7 +134,7 @@ void MSTK_voidStopInterval(void)
 	MSTK_voidCounterEnDis(MSTK_COUNTER_DIS);
 }
 
-void SysTik_Handler(void)
+void SysTick_Handler(void)
 {
 	CallBack();
 	
