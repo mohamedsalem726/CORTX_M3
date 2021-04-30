@@ -3,6 +3,7 @@
 /* Date      : 12 FEB 2021                           */ 
 /* Version   : V01                                   */
 /*****************************************************/
+
 #include "STD_TYPES.h"
 #include "BIT_MATH.h"
 
@@ -115,7 +116,8 @@ void MGPIO_voidSetPinValue(u8 copy_u8Port , u8 copy_u8Pin , u8 copy_u8Value)
 		
 	default : break;
 	}
-u8 MGPIO_u8GetPinValue(u8 copy_u8Port , u8 copy_u8Pin)
+}
+u8 MGPIO_u8GetPinValue(u8 copy_u8Port , u8 Copy_u8Pin)
 {
 	u8  LOC_u8Result = 0;
 	
@@ -146,6 +148,7 @@ u8 MGPIO_u8GetPinValue(u8 copy_u8Port , u8 copy_u8Pin)
 }
 void MGPIO_voidLockPin(u8 copy_u8Port , u8 copy_u8Pin)
 {
+	u8 LOC_u8Var;
 	switch(copy_u8Port){
 	case GPIOA :
 	
@@ -154,9 +157,9 @@ void MGPIO_voidLockPin(u8 copy_u8Port , u8 copy_u8Pin)
 		CLR_BIT(MGPIOA->LCKR,15);
 		SET_BIT(MGPIOA->LCKR,15);
 		CLR_BIT(MGPIOA->LCKR,15);
-		GET_BIT(MGPIOA->LCKR,15);
+		LOC_u8Var =GET_BIT(MGPIOA->LCKR,15);
 		SET_BIT(MGPIOA->LCKR,15);
-		GET_BIT(MGPIOA->LCKR,15);
+		LOC_u8Var =  GET_BIT(MGPIOA->LCKR,15);
 		
 		/* Pin Locked */
 		MGPIOA->LCKR = (1 << copy_u8Pin);
@@ -170,9 +173,9 @@ void MGPIO_voidLockPin(u8 copy_u8Port , u8 copy_u8Pin)
 		CLR_BIT(MGPIOB->LCKR,15);
 		SET_BIT(MGPIOB->LCKR,15);
 		CLR_BIT(MGPIOB->LCKR,15);
-		GET_BIT(MGPIOB->LCKR,15);
+		LOC_u8Var =  GET_BIT(MGPIOB->LCKR,15);
 		SET_BIT(MGPIOB->LCKR,15);
-		GET_BIT(MGPIOB->LCKR,15);
+		LOC_u8Var = GET_BIT(MGPIOB->LCKR,15);
 		
 		/* Pin Locked */
 		MGPIOB->LCKR = (1 << copy_u8Pin);
@@ -186,9 +189,9 @@ void MGPIO_voidLockPin(u8 copy_u8Port , u8 copy_u8Pin)
     	CLR_BIT(MGPIOC->LCKR,15);
     	SET_BIT(MGPIOC->LCKR,15);
     	CLR_BIT(MGPIOC->LCKR,15);
-    	GET_BIT(MGPIOC->LCKR,15);
+    	LOC_u8Var = GET_BIT(MGPIOC->LCKR,15);
     	SET_BIT(MGPIOC->LCKR,15);
-    	GET_BIT(MGPIOC->LCKR,15);
+    	LOC_u8Var = GET_BIT(MGPIOC->LCKR,15);
     	
     	/* Pin Locked */
     	MGPIOC->LCKR = (1 << copy_u8Pin);
