@@ -1,8 +1,9 @@
 /*****************************************************/
 /* Auther    : Mohamed Salem                         */
-/* Date      : 12 FEB 2021                           */ 
-/* Version   : V01                                   */
+/* Date      : 01 MAY 2021                           */ 
+/* Version   : V02                                   */
 /*****************************************************/
+
 #include "STD_TYPES.h"
 #include "BIT_MATH.h"
 
@@ -145,3 +146,95 @@ u8 MGPIO_u8GetPinValue(u8 copy_u8Port , u8 Copy_u8Pin)
 	return LOC_u8Result ;
 	
 }
+
+void MGPIO_voidSetPortDirection(u8 Copy_u8Port , u8 Copy_u8Position , u8 Copy_u8Mode)
+{
+
+	switch(Copy_u8Port){
+
+	case GPIOA:
+
+		if      (Copy_u8Position == GPIO_LOW ) {MGPIOA->CRL = (0x11111111 * Copy_u8Mode); }
+		else if (Copy_u8Position == GPIO_HIGH) {MGPIOA->CRH = (0x11111111 * Copy_u8Mode); }
+
+		break;
+	case GPIOB:
+
+		if      (Copy_u8Position == GPIO_LOW ) {MGPIOB->CRL = (0x11111111 * Copy_u8Mode); }
+		else if (Copy_u8Position == GPIO_HIGH) {MGPIOB->CRH = (0x11111111 * Copy_u8Mode); }
+
+		break;
+	case GPIOC:
+
+		if      (Copy_u8Position == GPIO_LOW  ) {MGPIOC->CRL = (0x11111111 * Copy_u8Mode); }
+		else if (Copy_u8Position == GPIO_HIGH ) {MGPIOC->CRH = (0x11111111 * Copy_u8Mode); }
+
+		break;
+
+	}
+
+}
+
+void MGPIO_voidSetPortValue(u8 Copy_u8Port , u8 Copy_u8Position , u16 Copy_u8Value)
+{
+
+	switch(Copy_u8Port){
+
+	case GPIOA:
+
+		if      (Copy_u8Position == GPIO_LOW ){MGPIOA->ODR = (MGPIOA->ODR & 0xFF00) | ((u8)Copy_u8Value); }
+		else if (Copy_u8Position == GPIO_HIGH){MGPIOA->ODR = (MGPIOA->ODR & 0x00FF) | (Copy_u8Value); }
+
+		break;
+	case GPIOB:
+
+		if      ( Copy_u8Position == GPIO_LOW  ){ MGPIOB->ODR = (MGPIOB->ODR & 0xFF00 ) | ((u8)Copy_u8Value); }
+		else if ( Copy_u8Position == GPIO_HIGH ){ MGPIOB->ODR = (MGPIOB->ODR & 0x00FF ) | (Copy_u8Value ); }
+
+		break;
+	case GPIOC:
+
+		if      ( Copy_u8Position == GPIO_LOW  ){ MGPIOC->ODR = (MGPIOC->ODR & 0xFF00 ) | ((u8)Copy_u8Value); }
+		else if ( Copy_u8Position == GPIO_HIGH ){ MGPIOC->ODR = (MGPIOC->ODR & 0x00FF ) | (Copy_u8Value); }
+
+		break;
+
+	}
+
+}
+
+u16 MGPIO_u16GetPortValue(u8 Copy_u8Port , u8 Copy_u8Position)
+{
+
+	u16 LOC_u16Result = 0;
+
+	switch(Copy_u8Port){
+
+	case GPIOA:
+
+		LOC_u16Result = MGPIOA->IDR;
+		if      (Copy_u8Position == GPIO_LOW){LOC_u16Result &= 0x00FF;}
+		else if (Copy_u8Position == GPIO_HIGH){LOC_u16Result &= 0xFF00;}
+
+		break;
+	case GPIOB:
+
+		LOC_u16Result = MGPIOB->IDR;
+		if      (Copy_u8Position == GPIO_LOW ){LOC_u16Result &= 0x00FF; }
+		else if (Copy_u8Position == GPIO_HIGH){LOC_u16Result &= 0xFF00; }
+
+		break;
+	case GPIOC:
+
+		LOC_u16Result = MGPIOC->IDR;
+		if      (Copy_u8Position == GPIO_LOW ){LOC_u16Result &= 0x00FF; }
+		else if (Copy_u8Position == GPIO_HIGH){LOC_u16Result &= 0xFF00; }
+
+		break;
+
+	}
+
+	return LOC_u16Result ;
+
+}
+

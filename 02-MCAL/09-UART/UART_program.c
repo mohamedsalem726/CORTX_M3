@@ -4,20 +4,21 @@
 /* Version   : V01                                     */
 /*******************************************************/
 
-#include "STD__TYPES.h"
+#include "STD_TYPES.h"
 #include "BIT_MATH.h"
 
 #include "UART_interface.h"
 #include "UART_private.h"
 #include "UART_config.h"
 
-
+#define THRESHOLD_VALUE  9000000UL
+#define MUSART1_BAUD_RATE         (u32)9600
 
 void MUSART1_voidInit(void)
 {
-	u32 LOC_u64Mantissa = ( F_CPU ) / ( 16 * USART1_BAUD_RATE ) ;
+	u32 LOC_u64Mantissa = ( F_CPU ) / ( 16 * MUSART1_BAUD_RATE) ;
 
-	u32 LOC_u64Fraction = ( ( ( F_CPU * 100 ) / ( 16 * USART1_BAUD_RATE )  ) % 100 ) * 16 ;
+	u32 LOC_u64Fraction = ( ( ( F_CPU * 100 ) / ( 16 * MUSART1_BAUD_RATE )  ) % 100 ) * 16 ;
 
 	if( LOC_u64Fraction > 1500 ){ LOC_u64Mantissa += 1 ; LOC_u64Fraction  = 0 ; }
 		#if MUSART1_STATUS == USART1_ENABLE
@@ -41,12 +42,12 @@ void MUSART1_voidInit(void)
 		#elif MUSART1_PARITY == EVEN_PARITY
 
 					SET_BIT( MUSART1 -> CR1 , 10 );
-					CLR_BIT( MUSART1 -> CR1 , 9 );
+					CLR_BIT( MUSART1 -> CR1 , 11 );
 
 		#elif MUSART1_PARITY == ODD_PARITY
 
 					SET_BIT( MUSART1 -> CR1 , 10 );
-					SET_BIT( MUSART1 -> CR1 , 9 );
+					SET_BIT( MUSART1 -> CR1 , 11 );
 
 		#endif
 
@@ -118,36 +119,57 @@ void MUSART1_voidInit(void)
 	#endif
 }
 
-void MUSART_voidTransmit(u8 Copy_u8Arr[])
+void MUSART1_voidSendChar(u8 Copy_u8Char)
 {
-	u8 LOC_u8Counter = 0;
-	while(Copy_u8Arr[LOC_u8Counter] != '\0' )
-	{
-		MUSART1 -> DR = Copy_u8Arr[LOC_u8Counter];
-		/* Wait Till Transmission Complete */
-		while(GET_BIT(MUSART1 -> CR1 , 6) == 0);
-		LOC_u8Counter++;
-	}
+
+	MUSART1 -> DR = Copy_u8Char ;
+
+	while( GET_BIT( MUSART1 -> SR , 6 ) == 0 );
+
+	CLR_BIT( MUSART1 -> SR , 6 );
+
 }
 
-u8 MUSART_u8Receive(void)
+
+void MUSART1_voidSendString(u8 *Copy_ptrString)
 {
-	u8 LOC_u8ReceivedData = 0;
-	u16 LOC_u8TimeOut = 0;
-	while((GET_BIT (MUSART1 -> SR, 5) == 0))
-	{
-		LOC_TimeOut++;
+
+	u8 LOC_u8Iterator = 0 ;
+
+	while ( Copy_ptrString[ LOC_u8Iterator ] != '\0' ){
+
+		MUSART1_voidSendChar(Copy_ptrString[ LOC_u8Iterator ]);
+		LOC_u8Iterator++ ;
+
 	}
 
-	if( LOC_TimeOut == 10000 )
+}
+
+u8 MUSART1_u8ReceiveChar(void)
+{
+
+	u8  LOC_u8Data  = 0 ;
+	u32 LOC_u8TimeOut = 0 ;
+
+	CLR_BIT(MUSART1 -> SR, 5);
+
+	while( ( GET_BIT(MUSART1 -> SR, 5) == 0 ) && (LOC_u8TimeOut < THRESHOLD_VALUE) )
 	{
-		LOC_u8ReceivedData = 255;
+		LOC_u8TimeOut++;
+	}
+
+	if( LOC_u8TimeOut == THRESHOLD_VALUE )
+	{
+		LOC_u8Data = 255;
 	}
 	else
 	{
 
-		LOC_u8ReceivedData = MUSART1 -> DR;
+		LOC_u8Data = MUSART1 -> DR;
 	}
-	
-	return(LOC_u8ReceivedData); 
+
+	return LOC_u8Data;
+
 }
+
+

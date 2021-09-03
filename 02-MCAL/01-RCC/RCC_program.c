@@ -11,7 +11,7 @@
 #include "RCC_private.h"
 #include "RCC_config.h"
 
-void MRCC_VidInit( void ){
+void MRCC_voidInit( void ){
 
 	u32 LOC_u32TimeOut = 0;
 
@@ -147,27 +147,27 @@ void MRCC_VidInit( void ){
 
 }
 
-void MRCC_VidEnablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
+void MRCC_voidEnablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
 
 
 		switch( Copy_u8PeripheralBus ){
 
-			case AHB_BUS  : SET_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
-			case APB1_BUS :	SET_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
-			case APB2_BUS : SET_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
+			case RCC_AHB  : SET_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
+			case RCC_APB1 :	SET_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
+			case RCC_APB2 : SET_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
 
 		}
 
 
 }
 
-void MRCC_VidDisablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
+void MRCC_voidDisablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
 
 		switch( Copy_u8PeripheralBus ){
 
-			case AHB_BUS  : CLR_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
-			case APB1_BUS :	CLR_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
-			case APB2_BUS : CLR_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
+			case RCC_AHB  : CLR_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
+			case RCC_APB1 :	CLR_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
+			case RCC_APB2 : CLR_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
 
 		}
 }
