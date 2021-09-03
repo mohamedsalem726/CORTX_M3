@@ -1,12 +1,15 @@
 /*****************************************************/
 /* Auther    : Mohamed Salem                         */
-/* Date      : 12 FEB 2021                           */ 
+/* Date      : 03 MAY 2021                           */ 
 /* Version   : V01                                   */
 /*****************************************************/
-#ifndef GPIO_CONFIG_H
-#define GPIO_CONFIG_H
 
+#ifndef _TFT_PRIVATE_H
+#define _TFT_PRIVATE_H
 
+static void HTFT_voidWriteCommand(u8 Copy_u8Command);
+
+static void HTFT_voidWriteData(u8 Copy_u8Data);
 
 
 #endif

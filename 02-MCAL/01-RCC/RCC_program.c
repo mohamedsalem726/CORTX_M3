@@ -5,181 +5,169 @@
 /************************************************/
 #include "STD_TYPES.h"
 #include "BIT_MATH.h"
+#include "ERROR_STATUS.h"
 
 #include "RCC_interface.h"
 #include "RCC_private.h"
 #include "RCC_config.h"
 
-void RCC_voidInitSysClock(void)
-{
-	#if    RCC_CLOCK_TYPE == RCC_HSE_CRYSTAL
-	    RCC_CR   = 0x00010000; /* Enable HEE WITH NO BYPASS */
-		RCC_CFGR = 0x00000001;  
-		
-	#elif  RCC_CLOCK_TYPE == RCC_HSE_RC
-        RCC_CR   = 0x00050000; /* Enable HEE WITH BYPASS */
-		RCC_CFGR = 0x00000001;
-	  
-	#elif  RCC_CLOCK_TYPE == RCC_HSI
-	    RCC_CR   = 0x00000081; /* Enable HSI */
-		RCC_CFGR = 0x00000000;
-		
-	#elif  RCC_CLOCK_TYPE == RCC_PLL
-       #if   RCC_PLL_INPUT == RCC_PLL_IN_HSI_DIV_2
-	      #if   RCC_PLL_MUL_val == 2
-		     RCC_CFGR = 0x00000002;
-		  #elif RCC_PLL_MUL_val == 3
-		     RCC_CFGR = 0x00040002;
-		  #elif RCC_PLL_MUL_val == 4
-		     RCC_CFGR = 0x00080002;
-		  #elif RCC_PLL_MUL_val == 5
-		     RCC_CFGR = 0x000C0002;
-		  #elif RCC_PLL_MUL_val == 6
-		     RCC_CFGR = 0x00100002;
-		  #elif RCC_PLL_MUL_val == 7
-		     RCC_CFGR = 0x00140002;
-		  #elif RCC_PLL_MUL_val == 8
-		     RCC_CFGR = 0x00180002;
-		  #elif RCC_PLL_MUL_val == 9
-		     RCC_CFGR = 0x001C0002;
-		  #elif RCC_PLL_MUL_val == 10
-		     RCC_CFGR = 0x00200002;
-		  #elif RCC_PLL_MUL_val == 11
-		     RCC_CFGR = 0x00240002;
-		  #elif RCC_PLL_MUL_val == 12
-		     RCC_CFGR = 0x00280002;
-		  #elif RCC_PLL_MUL_val == 13
-		     RCC_CFGR = 0x002C0002;
-		  #elif RCC_PLL_MUL_val == 14
-		     RCC_CFGR = 0x00300002;
-		  #elif RCC_PLL_MUL_val == 15
-		     RCC_CFGR = 0x00340002;
-		  #elif RCC_PLL_MUL_val == 16
-		     RCC_CFGR = 0x00380002 || 0x003C0002;
-		  #else
-		   #error("Your Chosed Wrong MUL INPUT")
-		  #endif
-	   
-	   #elif RCC_PLL_INPUT == RCC_PLL_IN_HSE_DIV_2
-	      #if   RCC_PLL_MUL_val == 2
-		     RCC_CFGR = 0x00030002;
-		  #elif RCC_PLL_MUL_val == 3
-		     RCC_CFGR = 0x00070002;
-		  #elif RCC_PLL_MUL_val == 4
-		     RCC_CFGR = 0x000B0002;
-		  #elif RCC_PLL_MUL_val == 5
-		     RCC_CFGR = 0x000F0002;
-		  #elif RCC_PLL_MUL_val == 6
-		     RCC_CFGR = 0x00130002;
-		  #elif RCC_PLL_MUL_val == 7
-		     RCC_CFGR = 0x00170002;
-		  #elif RCC_PLL_MUL_val == 8
-		     RCC_CFGR = 0x001B0002;
-		  #elif RCC_PLL_MUL_val == 9
-		     RCC_CFGR = 0x001F0002;
-		  #elif RCC_PLL_MUL_val == 10
-		     RCC_CFGR = 0x00230002;
-		  #elif RCC_PLL_MUL_val == 11
-		     RCC_CFGR = 0x00270002;
-		  #elif RCC_PLL_MUL_val == 12
-		     RCC_CFGR = 0x002B0002;
-		  #elif RCC_PLL_MUL_val == 13
-		     RCC_CFGR = 0x002F0002;
-		  #elif RCC_PLL_MUL_val == 14
-		     RCC_CFGR = 0x00330002;
-		  #elif RCC_PLL_MUL_val == 15
-		     RCC_CFGR = 0x00370002;
-		  #elif RCC_PLL_MUL_val == 16
-		     RCC_CFGR = 0x003B0002 || 0x003F0002;
-		  #else
-		   #error("Your Chosed Wrong MUL INPUT")
-		  #endif
-	   
-	   #elif RCC_PLL_INPUT == RCC_PLL_IN_HSE
-          #if   RCC_PLL_MUL_val == 2
-		     RCC_CFGR = 0x00010002;
-		  #elif RCC_PLL_MUL_val == 3
-		     RCC_CFGR = 0x00050002;
-		  #elif RCC_PLL_MUL_val == 4
-		     RCC_CFGR = 0x00090002;
-		  #elif RCC_PLL_MUL_val == 5
-		     RCC_CFGR = 0x000D0002;
-		  #elif RCC_PLL_MUL_val == 6
-		     RCC_CFGR = 0x00110002;
-		  #elif RCC_PLL_MUL_val == 7
-		     RCC_CFGR = 0x00150002;
-		  #elif RCC_PLL_MUL_val == 8
-		     RCC_CFGR = 0x00190002;
-		  #elif RCC_PLL_MUL_val == 9
-		     RCC_CFGR = 0x001D0002;
-		  #elif RCC_PLL_MUL_val == 10
-		     RCC_CFGR = 0x00210002;
-		  #elif RCC_PLL_MUL_val == 11
-		     RCC_CFGR = 0x00250002;
-		  #elif RCC_PLL_MUL_val == 12
-		     RCC_CFGR = 0x00290002;
-		  #elif RCC_PLL_MUL_val == 13
-		     RCC_CFGR = 0x002D0002;
-		  #elif RCC_PLL_MUL_val == 14
-		     RCC_CFGR = 0x00310002;
-		  #elif RCC_PLL_MUL_val == 15
-		     RCC_CFGR = 0x00350002;
-		  #elif RCC_PLL_MUL_val == 16
-		     RCC_CFGR = 0x00390002 || 0x003D0002;
-		  #else
-		   #error("Your Chosed Wrong MUL INPUT")
-		  #endif
-	   
-	   #else
-		   #error("Your Chosed Wrong PLL Input")
-	   #endif
-	
+void MRCC_VidInit( void ){
+
+	u32 LOC_u32TimeOut = 0;
+
+	#if   CLOCK_TYPE == HSI
+
+		/* BIT 1:0 -> Choose Between HSI OR HSE OR PLL */
+		/* HSI Selected As A System Clock */
+		CLR_BIT( MRCC->CFGR , 0  );
+		CLR_BIT( MRCC->CFGR , 1  );
+		/* Bit 0 -> Enable The HSI Clock */
+		SET_BIT( MRCC->CR   , 0  );
+		/* Bit 1 -> Checking While The HSI Clock Is Stable */
+		while( ( ( GET_BIT( MRCC->CR , 1 ) ) == 0 ) && ( LOC_u32TimeOut < 100000 ) ){ LOC_u32TimeOut++; }
+		if( LOC_u32TimeOut >= 100000 ){ /*TimeOut*/ }
+
+	#elif CLOCK_TYPE == HSE
+
+		/* BIT 1:0 -> Choose Between HSI OR HSE OR PLL */
+		/* HSE Selected As A System Clock */
+		SET_BIT( MRCC->CFGR , 0  );
+		CLR_BIT( MRCC->CFGR , 1  );
+		/* Bit 16 -> Enable The HSE Clock */
+		SET_BIT( MRCC->CR   , 16 );
+		/* Bit 17 -> Checking While The HSE Clock Is Stable */
+		while( ( ( GET_BIT( MRCC->CR , 17 ) ) == 0 ) && ( LOC_u32TimeOut < 100000 ) ){ LOC_u32TimeOut++; }
+		if( LOC_u32TimeOut >= 100000 ){ /*TimeOut*/ }
+
+	#elif CLOCK_TYPE == PLL
+
+		/* BIT 1:0 -> Choose Between HSI OR HSE OR PLL */
+		/* PLL Selected As A System Clock */
+		CLR_BIT( MRCC->CFGR , 0  );
+		SET_BIT( MRCC->CFGR , 1  );
+
+		/*The Start Of Nested #IF*/
+		/* Choosing The Multiplication Factor For PLL */
+		#if ( CLOCK_FACTOR >= NO_CLOCK_FACTOR ) && ( CLOCK_FACTOR <= PLL_CLOCK_MULTIPLE_BY_16)
+
+		MRCC->CFGR &= ~( ( 0b1111 )     << 18 ) ;
+		MRCC->CFGR |=  ( CLOCK_FACTOR ) << 18   ;
+
+		#elif ( CLOCK_FACTOR > PLL_CLOCK_MULTIPLE_BY_16 ) || ( CLOCK_FACTOR < NO_CLOCK_FACTOR )
+			#warning "Wrong Multiplication Factor"
+		/*The End OF Nested #IF */
+		#endif
+
+		/*The Start Of Nested #IF*/
+		#if PLL_SOURCE == PLL_HSI_DIVIDED_BY_2
+
+			/* BIT 16 -> Choose PLL Source -> If HSI/2 OR HSE */
+			/* PLL Entery Clock Source Is HSI Divided By 2 */
+			CLR_BIT( MRCC->CFGR , 16 );
+
+		#elif PLL_SOURCE == PLL_HSE
+
+			/* Bit 16 -> Enable The HSE Clock */
+			SET_BIT( MRCC->CR   , 16 );
+
+			/* BIT 16 -> Choose PLL Source -> If HSI/2 OR HSE */
+			/* PLL Entery Clock Source Is HSE */
+			SET_BIT( MRCC->CFGR , 16 );
+
+			/* BIT 17 -> IF PLL Source IS HSE Then Choose Between Divide HSE/2 Or Not  */
+			/* HSE Is Not Divided */
+			CLR_BIT( MRCC->CFGR , 17 );
+
+		#elif PLL_SOURCE == PLL_HSE_DIVIDED_BY_2
+
+			/* Bit 16 -> Enable The HSE Clock */
+			SET_BIT( MRCC->CR   , 16 );
+
+			/* BIT 16 -> Choose PLL Source -> If HSI/2 OR HSE */
+			/* PLL Entery Clock Source Is HSE */
+			SET_BIT( MRCC->CFGR , 16 );
+
+			/* BIT 17 -> IF PLL Source IS HSE Then Choose Between Divide HSE/2 Or Not  */
+			/* HSE Is Divided By Two */
+			SET_BIT( MRCC->CFGR , 17 );
+
+			/*The End Of Nested IF*/
+		#endif
+
+		/* PLL Clock Enable */
+		SET_BIT( MRCC->CR , 24 );
+
+		/* Wait Until PLL Ready Flag Set */
+		while( ( ( GET_BIT( MRCC->CR , 25 ) ) == 0 ) && ( LOC_u32TimeOut < 100000 ) ){ LOC_u32TimeOut++; }
+		if( LOC_u32TimeOut >= 100000 ){ /*TimeOut*/ }
+
+	#elif CLOCK_TYPE == HSE_BYPASS
+
+		/* The HSEBYP Can Be Written Only When HSE Oscilator Is Disabled */
+		/* HSE Clock Disabled */
+		CLR_BIT( MRCC->CR   , 16 );
+
+		/* BIT 18 -> To Select HSE BYPASS */
+		/* HSEBYPASS Clock Enable */
+		SET_BIT( MRCC->CR , 18 );
+
+		/* BIT 1:0 -> Choose Between HSI OR HSE OR PLL */
+		/* HSE Selected As A System Clock */
+		SET_BIT( MRCC->CFGR , 0  );
+		CLR_BIT( MRCC->CFGR , 1  );
+
+		/* Bit 16 -> Enable The HSE Clock */
+		SET_BIT( MRCC->CR   , 16 );
+
+		/* Bit 17 -> Checking While The HSE Clock Is Stable */
+		while( ( ( GET_BIT( MRCC->CR , 17 ) ) == 0 ) && ( LOC_u32TimeOut < 100000 ) ){ LOC_u32TimeOut++; }
+		if( LOC_u32TimeOut >= 100000 ){ /*TimeOut*/ }
+
 	#else
-		#error("Your Chosed Wrong Clock Type")
+
+		#error " Wrong Clock System Type Configuration "
+
+	/* The Close Of Big If */
 	#endif
+
+	/* For Clock Security System */
+	#if CLOCK_SECURITY_SYSTEM == ENABLE_CLOCK_SECURITY_SYSTEM
+
+		SET_BIT( MRCC->CR , 19 );
+
+	#elif CLOCK_SECURITY_SYSTEM == DISABLE_CLOCK_SECURITY_SYSTEM
+
+		CLR_BIT( MRCC->CR , 19 );
+
+	#else
+
+		#warning " Wrong Clock Security System Configuration Choice "
+
+	#endif
+
 }
 
+void MRCC_VidEnablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
 
 
-void RCC_voidEnableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
-{
-	if (Copy_u8PerId <= 31)
-	{
-		switch (Copy_u8BusId)
-		{
-			case RCC_AHB  : SET_BIT(RCC_AHBENR  ,Copy_u8PerId);    break;
-			case RCC_APB1 : SET_BIT(RCC_APB1ENR ,Copy_u8PerId);    break;
-			case RCC_APB2 : SET_BIT(RCC_APB2ENR ,Copy_u8PerId);    break;
+		switch( Copy_u8PeripheralBus ){
+
+			case AHB_BUS  : SET_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
+			case APB1_BUS :	SET_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
+			case APB2_BUS : SET_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
+
 		}
-	}
-	
-	else
-	{
-		/* Return Error */
-	}
-	
+
+
 }
 
+void MRCC_VidDisablePeripheralClock( u8 Copy_u8PeripheralBus , u8 Copy_u8Peripheral ){
 
-void RCC_voidDisableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
-{
-	if (Copy_u8PerId <= 31)
-	{
-		switch (Copy_u8BusId)
-		{
-			case RCC_AHB  : CLR_BIT(RCC_AHBENR  ,Copy_u8PerId);    break;
-			case RCC_APB1 : CLR_BIT(RCC_APB1ENR ,Copy_u8PerId);    break;
-			case RCC_APB2 : CLR_BIT(RCC_APB2ENR ,Copy_u8PerId);    break;
+		switch( Copy_u8PeripheralBus ){
+
+			case AHB_BUS  : CLR_BIT( MRCC->AHBENR  , Copy_u8Peripheral ); break;
+			case APB1_BUS :	CLR_BIT( MRCC->APB1ENR , Copy_u8Peripheral ); break;
+			case APB2_BUS : CLR_BIT( MRCC->APB2ENR , Copy_u8Peripheral ); break;
+
 		}
-	}
-	
-	else
-	{
-		/* Return Error */
-	}
-	
 }
-
-
-
-

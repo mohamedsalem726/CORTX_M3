@@ -1,11 +1,15 @@
 /*****************************************************/
 /* Auther    : Mohamed Salem                         */
-/* Date      : 12 FEB 2021                           */ 
+/* Date      : 03 MAY 2021                           */ 
 /* Version   : V01                                   */
 /*****************************************************/
-#ifndef GPIO_CONFIG_H
-#define GPIO_CONFIG_H
 
+#ifndef _TFT_INTERFACE_H
+#define _TFT_INTERFACE_H
+
+void HTFT_voidInit(void);
+
+void HTFT_voidDisplayImage(const u16 * Copy_u16Image);
 
 
 
