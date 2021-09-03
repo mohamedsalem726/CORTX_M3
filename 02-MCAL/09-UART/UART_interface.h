@@ -35,8 +35,16 @@
 
 void MUSART1_voidInit(void);
 
-void MUSART_voidTransmit(u8 Copy_u8Arr[]);
+void MUSART1_voidSendChar(u8 Copy_u8Char);
 
-u8 MUSART_u8Receive(void);
+void MUSART1_voidSendString(u8 *Copy_ptrString);
+
+u8   MUSART1_u8ReceiveChar(void);
+
+u8  *MUSART1_PtrReadString(void);
+
+void MUSART1_voidSetCallBack(void (*ptr) (void));
+
+
 
 #endif

@@ -17,7 +17,7 @@ typedef struct{
 	volatile u32 GTPR;
 }UART_Register;
 
-#define MUSART    ((volatile UART_Register*)0x40013800)
+#define MUSART1    ((volatile UART_Register*)0x40013800)
 
 
 #endif

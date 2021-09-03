@@ -14,7 +14,7 @@
 /* USART1_Configuration */
 
 #define MUSART1_STATUS            MUSART1_ENABLE
-#define MUSART1_BAUD_RATE         (u32) 115200
+#define MUSART1_BAUD_RATE         (u32)9600
 
 #define MUSART1_WORD_LENGTH       _8BIT_WORD_LENGTH
 #define MUSART1_PARITY            PARITY_DISABLE
