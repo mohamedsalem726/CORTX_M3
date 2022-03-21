@@ -214,7 +214,7 @@ typedef struct{
 	volatile u32 CCR2;
 	volatile u32 CCR3;
 	volatile u32 CCR4;
-	volatile u32 RESERVED;
+	volatile u32 RESERVED2;
 	volatile u32 DCR;
 	volatile u32 DMAR;
 }TIMER_RegDef_t;
