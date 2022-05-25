@@ -22,10 +22,7 @@
 
 #define PWM_Polarity            Active_High
 
-PWM_OutputStateType PWM_State;
 
-
-const PWM_ConfigType* ConfigPtr;
 
 
 

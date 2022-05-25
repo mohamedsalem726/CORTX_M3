@@ -16,9 +16,9 @@
 
 
 /* Clock Division */
-#define CLK_INT      0
-#define CLK_INT_*_2  1
-#define CLK_INT_*_4  2
+#define CLK_INT        0
+#define CLK_INT_*_2    1
+#define CLK_INT_*_4    2
 /*****************************************************************************/
 
 /* Center-aligned mode selection */

@@ -227,12 +227,12 @@ typedef struct{
 #define TIMER4_BASE_ADDRESS 0x40000800
 #define TIMER5_BASE_ADDRESS 0x40000C00
 
-#define TIMER2  ((volatile TIMER_RegDef_t*)TIMER1_BASE_ADDRESS)
+#define TIMER2  ((volatile TIMER_RegDef_t*)TIMER2_BASE_ADDRESS)
 
-#define TIMER3  ((volatile TIMER_RegDef_t*)TIMER2_BASE_ADDRESS)
+#define TIMER3  ((volatile TIMER_RegDef_t*)TIMER3_BASE_ADDRESS)
 
-#define TIMER4  ((volatile TIMER_RegDef_t*)TIMER3_BASE_ADDRESS)
+#define TIMER4  ((volatile TIMER_RegDef_t*)TIMER4_BASE_ADDRESS)
 
-#define TIMER5  ((volatile TIMER_RegDef_t*)TIMER4_BASE_ADDRESS)
+#define TIMER5  ((volatile TIMER_RegDef_t*)TIMER5_BASE_ADDRESS)
 
 #endif
