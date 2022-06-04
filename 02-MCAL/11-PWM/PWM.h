@@ -8,17 +8,15 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-#include "STD_TYPES.h"
-#include "BIT_MATH.h"
-#include "ERROR_STATUS.h"
+
 #include "STM32F103C8.h"
 #include "PWM_Cfg.h"
 
 
 /* Clock Division */
 #define CLK_INT        0
-#define CLK_INT_*_2    1
-#define CLK_INT_*_4    2
+#define CLK_INTx2    1
+#define CLK_INTx4    2
 /*****************************************************************************/
 
 /* Center-aligned mode selection */
@@ -39,10 +37,10 @@
 /***************************************************************************/
 
 /* Number Of Channel */
-#define  PWM_Channel_1  1
-#define  PWM_Channel_2  2
-#define  PWM_Channel_3  3
-#define  PWM_Channel_4  4
+#define  MPWM_Channel_1  1
+#define  MPWM_Channel_2  2
+#define  MPWM_Channel_3  3
+#define  MPWM_Channel_4  4
 /***************************************************************************/
 
 /* Prescaler Value */
@@ -50,11 +48,15 @@
 
 
 // Numeric identifier of a PWM channel.
-typedef u32 PWM_ChannelType;
+typedef u32 MPWM_ChannelType;
 /*********************************************************************/
 
 // Definition of the period of a PWM channel.
-typedef u32 PWM_PeriodType;
+typedef u32 MPWM_PeriodType;
+/*********************************************************************/
+
+// Definition of the duty cycle of a PWM channel.
+typedef u16 MPWM_DutyCycleType;
 /*********************************************************************/
 
 // Output state of a PWM channel.
@@ -62,17 +64,17 @@ typedef enum OutputStateType
 {
 	PWM_HIGH = 1,  // The PWM channel is in high state.
 	PWM_LOW  = 0   // The PWM channel is in low state.
-}PWM_OutputStateType;
+}MPWM_OutputStateType;
 /*********************************************************************/
 
 /* This is the type of data structure containing the initialization data for the PWM driver. */
 typedef struct ConfigType
 {
-	PWM_ChannelType Channel;
-	PWM_PeriodType  Period;
-	u16             Duty_Cycle;
-	PWM_OutputStateType Idle_State;
-}PWM_ConfigType;
+	MPWM_ChannelType     Channel;
+	MPWM_PeriodType      Period;
+	MPWM_DutyCycleType   Duty_Cycle;
+	MPWM_OutputStateType Idle_State;
+}MPWM_ConfigType;
 /*********************************************************************/
 
 // Defines the class of a PWM channel.
@@ -85,7 +87,7 @@ typedef enum ChannelClassType
 	PWM_FIXED_PERIOD_SHIFTED /* The PWM channel has a fixed shifted period.
                                 Impossible to change it ( only if supported by
                                 hardware). */
-}Pwm_ChannelClassType;
+}MPwm_ChannelClassType;
 /*********************************************************************/
 
 
@@ -99,11 +101,11 @@ typedef enum EdgeNotificationType
 
 	PWM_BOTH_EDGES
 
-}PWM_EdgeNotificationType;
+}MPWM_EdgeNotificationType;
 /*********************************************************************/
 
-/* Service name      : PWM_Init
-   Syntax            : void Pwm_Init(const PWM_ConfigType* ConfigPtr).
+/* Service name      : MPWM_Init
+   Syntax            : void MPwm_Init(const PWM_ConfigType* ConfigPtr).
    Sync/Async        : Synchronous.
    Reentrancy        : Non Reentrant.
    Parameters (in)   : ConfigPtr Pointer to configuration set.
@@ -112,59 +114,72 @@ typedef enum EdgeNotificationType
    Return value      : None.
    Description       : Service for PWM initialization. */
 /*********************************************************************/
-void PWM_Init(const PWM_ConfigType* ConfigPtr);
+void MPWM_Init(const MPWM_ConfigType* ConfigPtr);
 
-/* Service name      : PWM_SetDutyCycle
-   Syntax            : void Pwm_SetDutyCycle(PWM_ChannelType ChannelNumber,u16 DutyCycle).
+/* Service name      : MPWM_SetDutyCycle
+   Syntax            : void MPwm_SetDutyCycle(PWM_ChannelType ChannelNumber,u16 DutyCycle).
    Sync/Async        : Synchronous.
    Reentrancy        : Reentrant for different channel numbers.
-   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM.
+   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM channel.
                        DutyCycle     ------> Min=0x0000 Max=0x8000.
    Parameters(inout) : None.
    Parameters (out)  : None.
    Return value      : None.
    Description       : Service sets the duty cycle of the PWM channel. */
 /****************************************************************************/
-void PWM_SetDutyCycle(PWM_ChannelType ChannelNumber,u16 DutyCycle);
+void MPWM_SetDutyCycle(MPWM_ChannelType ChannelNumber,MPWM_DutyCycleType DutyCycle);
 
-/* Service name      : PWM_SetPeriodAndDuty
-   Syntax            : void Pwm_SetPeriodAndDuty(PWM_ChannelType ChannelNumber,PWM_PeriodType Period,u16 DutyCycle).
+/* Service name      : MPWM_SetPeriodAndDuty
+   Syntax            : void MPwm_SetPeriodAndDuty(PWM_ChannelType ChannelNumber,PWM_PeriodType Period,u16 DutyCycle).
    Sync/Async        : Synchronous.
    Reentrancy        : Reentrant for different channel numbers.
-   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM.
-                       Period        ------> Period of the PWM signal.
+   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM channel.
                        DutyCycle     ------> Min=0x0000 Max=0x8000.
    Parameters(inout) : None.
    Parameters (out)  : None.
    Return value      : None.
    Description       : Service sets the period and the duty cycle of a PWM channel. */
 /**********************************************************************************************/
-void PWM_SetPeriodAndDuty(PWM_ChannelType ChannelNumber,PWM_PeriodType Period,u16 DutyCycle);
+void MPWM_SetPeriodAndDuty(MPWM_ChannelType ChannelNumber,MPWM_PeriodType Period,MPWM_DutyCycleType DutyCycle);
 
-/* Service name      : PWM_SetOutputToIdle
-   Syntax            : void Pwm_SetOutputToIdle(PWM_ChannelType ChannelNumber).
+/* Service name      : MPWM_SetOutputToIdle
+   Syntax            : void MPwm_SetOutputToIdle(PWM_ChannelType ChannelNumber).
    Sync/Async        : Synchronous.
    Reentrancy        : Reentrant for different channel numbers.
-   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM.
+   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM channel.
+   	   	   	   	   	   Period        ------> Period of the PWM signal.
+                       DutyCycle     ------> Min=0x0000 Max=0x8000.
    Parameters(inout) : None.
    Parameters (out)  : None.
    Return value      : None.
    Description       : Service sets the PWM output to the configured Idle state. */
 /**********************************************************************************************/
-void PWM_SetOutputToIdle(PWM_ChannelType ChannelNumber);
+void MPWM_SetOutputToIdle(MPWM_ChannelType ChannelNumber);
 
-/* Service name      : Pwm_GetOutputState
-   Syntax            : Pwm_OutputStateType Pwm_GetOutputState(PWM_ChannelType ChannelNumber).
+/* Service name      : MPwm_GetOutputState
+   Syntax            : MPwm_OutputStateType MPwm_GetOutputState(PWM_ChannelType ChannelNumber).
    Sync/Async        : Synchronous.
    Reentrancy        : Reentrant for different channel numbers.
-   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM.
+   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM channel.
    Parameters(inout) : None.
-   Parameters (out)  : Pwm_OutputStateType  -----> PWM_HIGH The PWM output state is high.
+   Parameters (out)  : MPwm_OutputStateType  -----> PWM_HIGH The PWM output state is high.
                                             -----> PWM_LOW The PWM output state is low.
    Return value      : None.
    Description       : Service to read the internal state of the PWM output signal. */
 /**********************************************************************************************/
-PWM_OutputStateType PWM_GetOutputState(PWM_ChannelType ChannelNumber);
+MPWM_OutputStateType MPWM_GetOutputState(MPWM_ChannelType ChannelNumber);
+
+/* Service name      : MPWM_GetDutyCycle
+   Syntax            : MPWM_DutyCycleType MPWM_GetDutyCycle(MPWM_ChannelType ChannelNumber).
+   Sync/Async        : Synchronous.
+   Reentrancy        : Reentrant for different channel numbers.
+   Parameters (in)   : ChannelNumber ------> Numeric identifier of the PWM channel.
+   Parameters(inout) : None.
+   Parameters (out)  : MPWM_DutyCycleType  -----> value of the duty cycle.
+   Return value      : None.
+   Description       : Service to read the internal state of the PWM output signal. */
+/**********************************************************************************************/
+MPWM_DutyCycleType MPWM_GetDutyCycle(MPWM_ChannelType ChannelNumber);
 
 
 
