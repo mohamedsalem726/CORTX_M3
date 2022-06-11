@@ -10,17 +10,13 @@
 
 #define Sys_Clock               8000000
 
-#define Prescaler_Value         Prescaler_15
+
 
 #define MPWM_Clock               CLK_INT
 
-#define MPWM_Aligned_Mode        Edge_aligned_mode
-
-#define MPWM_Counter_Direction   upcounter
-
 #define MPWM_Mode                Mode1
 
-#define MPWM_Polarity            Active_High
+
 
 
 

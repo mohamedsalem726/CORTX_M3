@@ -31,29 +31,9 @@ void MPWM_Init(const MPWM_ConfigType* ConfigPtr)
 	/* Auto-reload preload enable */
 	SET_BIT(TIMER3->CR1 , 7);
 
-	/* Center-aligned mode selection */
-	#if   MPWM_Aligned_Mode == Edge_aligned_mode
-		CLR_BIT(TIMER3->CR1 , 5);
-		CLR_BIT(TIMER3->CR1 , 6);
-	#elif MPWM_Aligned_Mode == Center_aligned_mode_1
-		SET_BIT(TIMER3->CR1 , 5);
-		CLR_BIT(TIMER3->CR1 , 6);
-	#elif MPWM_Aligned_Mode == Center_aligned_mode_2
-		CLR_BIT(TIMER3->CR1 , 5);
-		SET_BIT(TIMER3->CR1 , 6);
-	#elif MPWM_Aligned_Mode == Center_aligned_mode_3
-		SET_BIT(TIMER3->CR1 , 5);
-		SET_BET(TIMER3->CR1 , 6);
-	#endif
 
-	/* Direction */
-	#if MPWM_Aligned_Mode == Edge_aligned_mode
-		#if   PWM_Counter_Direction == upcounter
-			CLR_BIT(TIMER3->CR1 , 4);
-		#elif MPWM_Counter_Direction == downcounter
-			SET_BIT(TIMER3->CR1 , 4);
-		#endif
-	#endif
+
+
 
 
 			/* Preload Value */
@@ -228,10 +208,10 @@ void MPWM_Init(const MPWM_ConfigType* ConfigPtr)
 	}
 
 	/* Update disable */
-	SET_BIT(TIMER3->CR1 , 1);
+	//SET_BIT(TIMER3->CR1 , 1);
 
 	/* Prescaler Value */
-	TIMER3->PSC = Prescaler_Value;
+	//TIMER3->PSC = Prescaler_Value;
 
 	/* Counter Enable */
 	SET_BIT(TIMER3->CR1 , 0);
